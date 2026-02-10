@@ -34,10 +34,10 @@ export const MessagesContainer = ({
     )
   );
 
-  // Auto-set active fragment from last assistant message
+  // Auto-set active fragment from last assistant message that has a valid sandbox URL
   useEffect(() => {
     const lastAssistantMessage = messages?.findLast(
-      (message) => message.role === "ASSISTANT"
+      (message) => message.role === "ASSISTANT" && message.fragment?.sandboxUrl
     );
     if (
       lastAssistantMessage?.fragment &&

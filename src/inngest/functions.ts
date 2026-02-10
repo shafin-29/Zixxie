@@ -15,10 +15,8 @@ import { parseAgentOutput } from "./utils";
 import { SANDBOX_TIMEOUT } from "./types";
 
 
-// Trailing slash required: @inngest/ai openai adapter resolves "chat/completions" against this base
-const NVIDIA_BASE = "https://integrate.api.nvidia.com/v1/";
-// Kimi-K2.5: use "moonshotai/kimi-k2.5" (dot). Override with NVIDIA_MODEL_ID if you get 404.
-const DEFAULT_NVIDIA_MODEL = "moonshotai/kimi-k2.5";
+const NVIDIA_BASE = "https://integrate.api.nvidia.com/v1";
+const DEFAULT_NVIDIA_MODEL = "moonshotai/kimi-k2-thinking";
 
 const getModelConfig = () => {
   const apiKey = process.env.NVIDIA_API_KEY;
@@ -42,6 +40,21 @@ export const codeAgentFunction = inngest.createFunction(
   { id: "code-agent" },
   { event: "code-agent/run" },
   async ({ event, step }) => {
+    const projectId = event.data.projectId;
+
+    const saveErrorMessage = async (err: unknown) => {
+      const msg = err instanceof Error ? err.message : String(err);
+      await prisma.message.create({
+        data: {
+          projectId,
+          content: `Generation failed: ${msg}`,
+          role: "ASSISTANT",
+          type: "ERROR",
+        },
+      });
+    };
+
+    try {
     const modelConfig = getModelConfig();
 
     const sandboxId = await step.run("get-sandbox-id", async () => {
@@ -90,7 +103,10 @@ export const codeAgentFunction = inngest.createFunction(
         model: modelConfig.model,
         apiKey: modelConfig.apiKey,
         baseUrl: modelConfig.baseUrl,
-        defaultParameters: { temperature: 0.95 },
+        defaultParameters: { 
+          temperature: 1.0,
+          top_p: 1.0,
+        },
       }),
 
       tools: [
@@ -216,7 +232,16 @@ export const codeAgentFunction = inngest.createFunction(
       result = await network.run(event.data.value, { state });
     } catch (error) {
       console.error("Network execution error:", error);
-      throw new Error(`Failed to run code agent network: ${error instanceof Error ? error.message : String(error)}`);
+      if (error instanceof Error && error.message.includes("401")) {
+        throw new Error("Invalid NVIDIA API key. Check NVIDIA_API_KEY in .env");
+      }
+      if (error instanceof Error && error.message.includes("404")) {
+        throw new Error(`Model not found. Check model name: ${modelConfig.model}`);
+      }
+      if (error instanceof Error && error.message.includes("429")) {
+        throw new Error("NVIDIA API rate limit exceeded. Try again later.");
+      }
+      throw new Error(`AI request failed: ${error instanceof Error ? error.message : String(error)}`);
     }
 
     const fragmentTitleGenerator = createAgent({
@@ -227,7 +252,10 @@ export const codeAgentFunction = inngest.createFunction(
         model: modelConfig.model,
         apiKey: modelConfig.apiKey,
         baseUrl: modelConfig.baseUrl,
-        defaultParameters: { temperature: 0.95 },
+        defaultParameters: { 
+          temperature: 1.0,
+          top_p: 1.0,
+        },
       }),
     });
 
@@ -239,7 +267,10 @@ export const codeAgentFunction = inngest.createFunction(
         model: modelConfig.model,
         apiKey: modelConfig.apiKey,
         baseUrl: modelConfig.baseUrl,
-        defaultParameters: { temperature: 0.95 },
+        defaultParameters: { 
+          temperature: 1.0,
+          top_p: 1.0,
+        },
       }),
     });
 
@@ -381,5 +412,9 @@ export const codeAgentFunction = inngest.createFunction(
       files: result.state.data.files,
       summary: result.state.data.summary,
     };
+    } catch (err) {
+      await saveErrorMessage(err);
+      throw err;
+    }
   },
 );

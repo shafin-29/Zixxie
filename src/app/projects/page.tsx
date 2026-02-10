@@ -25,25 +25,20 @@ export default function ProjectsPage() {
   const queryClient = useQueryClient();
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
 
-//   const deleteProjectMutation = useMutation({
-//     mutationFn: (projectId: string) => trpc.projects.delete.mutate({ id: projectId }),
-//     onSuccess: () => {
-//       queryClient.invalidateQueries({ queryKey: ['projects'] });
-//       setActiveDropdown(null);
-//     },
-//   });
+  const deleteProjectMutation = useMutation({
+    mutationFn: (projectId: string) => trpc.projects.delete.mutate({ id: projectId }),
+    onSuccess: () => {
+      void queryClient.invalidateQueries(trpc.projects.getMany.queryOptions());
+      setActiveDropdown(null);
+    },
+  });
 
-//   if (!user) return null;
-
-//   const handleDelete = async (projectId: string, projectName: string) => {
-//     if (window.confirm(`Are you sure you want to delete "${projectName}"?`)) {
-//       await deleteProjectMutation.mutateAsync(projectId);
-//     }
-//   };
-
-//   const handleEdit = (projectId: string) => {
-//     router.push(`/projects/${projectId}/edit`);
-//   };
+  const handleDelete = async (e: React.MouseEvent, projectId: string, projectName: string) => {
+    e.stopPropagation();
+    if (window.confirm(`Are you sure you want to delete "${projectName}"?`)) {
+      await deleteProjectMutation.mutateAsync(projectId);
+    }
+  };
 
   return (
     <div className="min-h-screen bg-background">
@@ -138,11 +133,8 @@ export default function ProjectsPage() {
                         </button>
                         <div className="h-px bg-border" />
                         <button
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            // handleDelete(project.id, project.name);
-                          }}
-                          className="w-full px-4 py-3 text-left text-sm hover:bg-red-50 hover:text-red-600 flex items-center gap-3 text-muted-foreground transition-colors duration-150"
+                          onClick={(e) => handleDelete(e, project.id, project.name)}
+                          className="w-full px-4 py-3 text-left text-sm hover:bg-red-50 hover:text-red-600 dark:hover:bg-red-950/30 dark:hover:text-red-400 flex items-center gap-3 text-muted-foreground transition-colors duration-150"
                         >
                           <Trash2 className="w-4 h-4" />
                           Delete Project

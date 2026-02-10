@@ -75,9 +75,9 @@ export function FragmentWeb({ data }: Props) {
         <div className="absolute inset-0 rounded-full bg-gradient-to-br from-primary/20 to-transparent animate-pulse" />
       </div>
       <div className="space-y-2">
-        <h3 className="text-lg font-semibold text-foreground">No Preview Available</h3>
+        <h3 className="text-lg font-semibold text-foreground">Preview not available</h3>
         <p className="text-sm text-muted-foreground max-w-md">
-          This version doesn't have a sandbox URL yet. Try generating a new version or wait for the current one to finish processing.
+          This version has no live preview (sandbox URL missing or expired). Send a new message to generate a fresh version, or check back if a run is still in progress.
         </p>
       </div>
     </div>

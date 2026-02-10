@@ -24,25 +24,28 @@ export const ProjectsList = () => {
   const queryClient = useQueryClient();
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
 
-  // const deleteProjectMutation = useMutation({
-  //   mutationFn: (projectId: string) => trpc.projects.delete.mutate({ id: projectId }),
-  //   onSuccess: () => {
-  //     queryClient.invalidateQueries({ queryKey: ['projects'] });
-  //     setActiveDropdown(null);
-  //   },
-  // });
+  const deleteProjectMutation = useMutation({
+    mutationFn: async (projectId: string) => {
+      const result = await fetch('/api/trpc/projects.delete', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ json: { id: projectId } }),
+      });
+      if (!result.ok) throw new Error('Failed to delete project');
+      return result.json();
+    },
+    onSuccess: () => {
+      void queryClient.invalidateQueries(trpc.projects.getMany.queryOptions());
+      setActiveDropdown(null);
+    },
+  });
 
-  // if (!user) return null;
-
-  // const handleDelete = async (projectId: string, projectName: string) => {
-  //   if (window.confirm(`Are you sure you want to delete "${projectName}"?`)) {
-  //     await deleteProjectMutation.mutateAsync(projectId);
-  //   }
-  // };
-
-  // const handleEdit = (projectId: string) => {
-  //   router.push(`/projects/${projectId}/edit`);
-  // };
+  const handleDelete = async (e: React.MouseEvent, projectId: string, projectName: string) => {
+    e.stopPropagation();
+    if (window.confirm(`Are you sure you want to delete "${projectName}"?`)) {
+      await deleteProjectMutation.mutateAsync(projectId);
+    }
+  };
 
   // Show only first 6 projects (2 rows)
   const displayedProjects = projects?.slice(0, 6) || [];
@@ -124,11 +127,8 @@ export const ProjectsList = () => {
                     </button>
                     <div className="h-px bg-border" />
                     <button
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        // handleDelete(project.id, project.name);
-                      }}
-                      className="w-full px-4 py-3 text-left text-sm hover:bg-red-50 hover:text-red-600 flex items-center gap-3 text-muted-foreground transition-colors duration-150"
+                      onClick={(e) => handleDelete(e, project.id, project.name)}
+                      className="w-full px-4 py-3 text-left text-sm hover:bg-red-50 hover:text-red-600 dark:hover:bg-red-950/30 dark:hover:text-red-400 flex items-center gap-3 text-muted-foreground transition-colors duration-150"
                     >
                       <Trash2 className="w-4 h-4" />
                       Delete Project
