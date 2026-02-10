@@ -25,18 +25,19 @@ export default function ProjectsPage() {
   const queryClient = useQueryClient();
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
 
-  const deleteProjectMutation = useMutation({
-    mutationFn: (projectId: string) => trpc.projects.delete.mutate({ id: projectId }),
-    onSuccess: () => {
-      void queryClient.invalidateQueries(trpc.projects.getMany.queryOptions());
-      setActiveDropdown(null);
-    },
-  });
+  const deleteProjectMutation = useMutation(
+    trpc.projects.delete.mutationOptions({
+      onSuccess: () => {
+        void queryClient.invalidateQueries(trpc.projects.getMany.queryOptions());
+        setActiveDropdown(null);
+      },
+    })
+  );
 
   const handleDelete = async (e: React.MouseEvent, projectId: string, projectName: string) => {
     e.stopPropagation();
     if (window.confirm(`Are you sure you want to delete "${projectName}"?`)) {
-      await deleteProjectMutation.mutateAsync(projectId);
+      await deleteProjectMutation.mutateAsync({ id: projectId });
     }
   };
 

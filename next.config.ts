@@ -21,9 +21,15 @@ const nextConfig: NextConfig = {
       },
     ],
   },
-  /* Disable ESLint warnings only during production builds */
   eslint: {
     ignoreDuringBuilds: true,
+  },
+  webpack: (config) => {
+    config.resolve.alias = {
+      ...config.resolve.alias,
+      'drizzle-orm': false,
+    };
+    return config;
   },
 };
 
