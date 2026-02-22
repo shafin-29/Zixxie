@@ -202,10 +202,11 @@ const AssistantMessage = ({
 
   const getLoadingMessage = () => {
     const messages = [
-      "Please wait, I'm generating your component",
-      "This may take a few minutes to create the perfect solution",
-      "Crafting your Next.js component with care",
-      "Building something amazing for you"
+      "Planning your ML pipeline...",
+      "Running data analysis...",
+      "Training your model...",
+      "Evaluating performance...",
+      "Generating artifacts...",
     ];
     return messages[Math.floor(Math.random() * messages.length)];
   };
@@ -220,7 +221,7 @@ const AssistantMessage = ({
             <div className="w-9 h-9 rounded-full bg-gradient-to-br from-muted/80 to-muted dark:from-muted/60 dark:to-muted/80 flex items-center justify-center border-2 border-border shadow-md">
               <Image 
                 src="/mylogo.png" 
-                alt="Zixxy AI" 
+                alt="Zixxy" 
                 width={20} 
                 height={20}
               />
@@ -234,7 +235,7 @@ const AssistantMessage = ({
           
           {/* Name and status */}
           <div className="flex items-center gap-3">
-            <span className="text-base font-bold">Zixxy AI</span>
+            <span className="text-base font-bold">Zixxy</span>
             {isGenerating && (
               <div className="flex items-center gap-1.5 px-2.5 py-1 bg-yellow-500/8 dark:bg-yellow-500/12 border border-yellow-500/20 dark:border-yellow-500/30 rounded-full">
                 <Loader2 className="h-3.5 w-3.5 text-yellow-600 animate-spin" />
