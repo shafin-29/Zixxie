@@ -49,8 +49,16 @@ export const projectsRouter = createTRPCRouter({
       z.object({
         value: z.string()
           .min(1, "Prompt cannot be empty")
-          .max(1000, "Prompt cannot be longer than 1000 characters"),
-        model: z.enum(["deepseek"])
+          .max(5000, "Prompt cannot be longer than 5000 characters"),
+        model: z.string(),
+        fileData: z
+          .object({
+            name: z.string(),
+            content: z.string(),
+            mimeType: z.string(),
+            size: z.number(),
+          })
+          .optional(),
       }),
     )
     .mutation(async ({ input, ctx }) => {
@@ -85,7 +93,9 @@ export const projectsRouter = createTRPCRouter({
           name: projectName,
           messages: {
             create: {
-              content: input.value,
+              content: input.fileData
+                ? `${input.value}\n\n[FILE UPLOADED: ${input.fileData.name} (${(input.fileData.size / 1024).toFixed(1)} KB)]` 
+                : input.value,
               role: "USER",
               type: "RESULT",
             }
@@ -93,12 +103,17 @@ export const projectsRouter = createTRPCRouter({
         }
       })
 
+      const messageValue = input.fileData
+        ? `${input.value}\n\n[FILE UPLOADED: ${input.fileData.name} (${(input.fileData.size / 1024).toFixed(1)} KB)]` 
+        : input.value
+
       await inngest.send({
         name: "code-agent/run",
-        data: { 
-            value: input.value,
-            projectId: createdProject.id,
-            model: input.model
+        data: {
+          value: messageValue,
+          projectId: createdProject.id,
+          model: input.model,
+          fileData: input.fileData ?? null,
         },
       });
 

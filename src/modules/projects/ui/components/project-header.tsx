@@ -18,7 +18,6 @@ import { useTRPC } from "@/trpc/client";
 //   DropdownMenuSubContent,
 //   DropdownMenuTrigger,
 // } from "@/components/ui/dropdown-menu";
-import { LightPullThemeSwitcher } from "@/components/21stdev/light-pull-theme-switcher";
 
 interface Props {
   projectId: string;
@@ -49,7 +48,6 @@ export const ProjectHeader = ({ projectId }: Props) => {
           </Link>
         </div>
       </div>
-      <LightPullThemeSwitcher />
-    </header>
+      </header>
   );
 };

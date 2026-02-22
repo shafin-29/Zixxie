@@ -1,0 +1,8 @@
+# ML Python sandbox template for AI ML Engineer Agent
+# Build this template with: e2b template build
+# After building, copy the generated template_id into .env.local as E2B_ML_TEMPLATE_ID
+
+start_cmd = "/start.sh"
+dockerfile = "e2b.Dockerfile"
+template_name = "ml-python-agent"
+template_id = "okz1vzgwexou2s3v386p"

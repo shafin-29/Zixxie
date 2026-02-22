@@ -8,13 +8,12 @@ datasource db {
 }
 
 model Project {
-  id String @id @default(uuid())
-  name String
-  userId String
+  id        String   @id @default(uuid())
+  name      String
+  userId    String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-
-  messages Message[]
+  messages  Message[]
 }
 
 enum MessageRole {
@@ -28,18 +27,14 @@ enum MessageType {
 }
 
 model Message {
-  id        String     @id @default(uuid())
+  id        String      @id @default(uuid())
   content   String
-
   role      MessageRole
   type      MessageType
-
-  createdAt DateTime   @default(now())
-  updatedAt DateTime   @updatedAt
-  
+  createdAt DateTime    @default(now())
+  updatedAt DateTime    @updatedAt
   projectId String
-  project   Project    @relation(fields: [projectId], references: [id], onDelete: Cascade)
-  
+  project   Project     @relation(fields: [projectId], references: [id], onDelete: Cascade)
   fragment  Fragment?
 }
 
@@ -47,17 +42,27 @@ model Fragment {
   id         String   @id @default(uuid())
   messageId  String   @unique
   message    Message  @relation(fields: [messageId], references: [id], onDelete: Cascade)
-  
-  sandboxUrl String
+
   title      String
+  sandboxUrl String   @default("")
   files      Json
+
+  // ML-specific artifact tracking
+  modelPath  String?
+  reportPath String?
+  dataPath   String?
+  appPath    String?
+  apiPath    String?
+  plots      Json?
+  metrics    Json?
+  phase      String   @default("done")
 
   createdAt  DateTime @default(now())
   updatedAt  DateTime @updatedAt
 }
 
 model Usage {
-  key String @id
+  key    String    @id
   points Int
   expire DateTime?
 }

@@ -39,7 +39,7 @@ const PricingSection = () => {
 
         {/* Billing Toggle */}
         <div className="flex items-center justify-center">
-          <div className="flex items-center bg-background p-1 rounded-lg border border-foreground/10">
+          <div className="flex items-center bg-white/10 p-1 rounded-lg border border-white/20 backdrop-blur-md shadow-md">
             <button
               onClick={() => setIsYearly(false)}
               className={`px-4 py-2 text-sm font-medium rounded-md transition-all duration-200 ${
@@ -72,10 +72,10 @@ const PricingSection = () => {
           <div
             onMouseEnter={() => setFocusedPlan("free")} 
             onMouseLeave={() => setFocusedPlan(null)}
-            className={`relative bg-background rounded-xl border transition-all duration-300 p-8 ${
+            className={`relative bg-white/10 border border-white/20 backdrop-blur-md rounded-xl shadow-md transition-all duration-300 p-8 ${
               focusedPlan === "free" 
-                ? 'border-primary/20 shadow-lg' 
-                : 'border-foreground/10 hover:border-foreground/20'
+                ? 'border-white/30 shadow-lg' 
+                : 'border-white/20 hover:border-white/30'
             }`}
           >
             <div className="space-y-6">
@@ -144,10 +144,10 @@ const PricingSection = () => {
           <div
             onMouseEnter={() => setFocusedPlan("pro")}
             onMouseLeave={() => setFocusedPlan(null)}
-            className={`relative bg-background rounded-xl border transition-all duration-300 p-8 ${
+            className={`relative bg-white/10 border border-white/20 backdrop-blur-md rounded-xl shadow-md transition-all duration-300 p-8 ${
               focusedPlan === "pro" 
-                ? 'border-primary/30 shadow-xl' 
-                : 'border-primary/15'
+                ? 'border-white/40 shadow-xl' 
+                : 'border-white/25'
             }`}
           >
             {/* Recommended badge */}

@@ -24,11 +24,14 @@ const nextConfig: NextConfig = {
   eslint: {
     ignoreDuringBuilds: true,
   },
-  webpack: (config) => {
-    config.resolve.alias = {
-      ...config.resolve.alias,
-      'drizzle-orm': false,
-    };
+  webpack: (config, { isServer, dev, nextRuntime }) => {
+    // Only apply webpack config when not using Turbopack
+    if (process.env.TURBOPACK !== '1') {
+      config.resolve.alias = {
+        ...config.resolve.alias,
+        'drizzle-orm': false,
+      };
+    }
     return config;
   },
 };

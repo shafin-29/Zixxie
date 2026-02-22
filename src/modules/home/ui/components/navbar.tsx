@@ -1,40 +1,47 @@
-"use client";
+'use client'
 
-import { useState, useEffect } from "react";
-import Link from "next/link";
-import Image from "next/image";
-import { SignedIn, SignedOut, SignUpButton } from "@clerk/nextjs";
-import { cn } from "@/lib/utils";
-import { UserControl } from "@/components/user-control";
-import { useScroll } from "@/hooks/use-scroll";
-import { LightPullThemeSwitcher } from "@/components/21stdev/light-pull-theme-switcher";
-import { FiGithub } from "react-icons/fi";
-import { InteractiveHoverButton } from "@/components/21stdev/interactive-hover-button";
+import { useState, useEffect } from "react"
+import Link from "next/link"
+import Image from "next/image"
+import { SignedIn, SignedOut, SignUpButton } from "@clerk/nextjs"
+import { cn } from "@/lib/utils"
+import { UserControl } from "@/components/user-control"
+import { useScroll } from "@/hooks/use-scroll"
+import { FiGithub } from "react-icons/fi"
+import { InteractiveHoverButton } from "@/components/21stdev/interactive-hover-button"
+import { Usage } from "@/modules/projects/ui/components/usage"
+import { useQuery } from "@tanstack/react-query"
+import { CreditCardIcon } from "lucide-react"
+import { useTRPC } from "@/trpc/client"
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"; // shadcn/ui
-import { ChevronDown } from "lucide-react";
+} from "@/components/ui/dropdown-menu"
+import { ChevronDown } from "lucide-react"
 
 export const Navbar = () => {
-  const isScrolled = useScroll();
-  const [mounted, setMounted] = useState(false);
+  const isScrolled = useScroll()
+  const [mounted, setMounted] = useState(false)
+  const [showCredits, setShowCredits] = useState(false)
 
   useEffect(() => {
-    setMounted(true);
-  }, []);
+    setMounted(true)
+  }, [])
+
+  const trpc = useTRPC()
+  const { data: usage } = useQuery(trpc.usage.status.queryOptions())
 
   const navItems = [
     { name: "Pricing", href: "/pricing" },
-  ];
+  ]
 
   const resources = [
     {
       title: "About",
       href: "/about",
-      description: "Learn more about Zixxy and our mission.",
+      description: "Learn about the Zixxy platform and our mission.",
     },
     {
       title: "Terms",
@@ -46,7 +53,7 @@ export const Navbar = () => {
       href: "/privacy",
       description: "How we protect and handle your data.",
     },
-  ];
+  ]
 
   return (
     <div
@@ -61,7 +68,10 @@ export const Navbar = () => {
           "absolute left-1/2 -translate-x-1/2 flex items-center gap-3 transition-all duration-500 backdrop-blur-md shadow-lg rounded-full px-3 py-1.5",
           isScrolled ? "gap-2 py-1" : "gap-3 py-1.5"
         )}
-        style={{background: 'linear-gradient(90deg, rgba(0, 212, 255, 1) 0%, rgba(9, 9, 121, 1) 35%, rgba(2, 0, 36, 1) 100%)'}}
+        style={{
+          background:
+            "linear-gradient(90deg, rgba(0, 212, 255, 1) 0%, rgba(9, 9, 121, 1) 35%, rgba(2, 0, 36, 1) 100%)",
+        }}
       >
         {/* Logo */}
         <Link href="/" className="flex items-center group">
@@ -97,7 +107,7 @@ export const Navbar = () => {
               className="relative group px-2 py-1 rounded-full text-white hover:text-white/80 transition-colors duration-300 text-sm"
             >
               {item.name}
-              <span className="absolute left-1/2 -bottom-1 h-0.5 w-0 bg-primary rounded-full transition-all duration-500 group-hover:w-2/3 -translate-x-1/2"></span>
+              <span className="absolute left-1/2 -bottom-1 h-0.5 w-0 bg-primary rounded-full transition-all duration-500 group-hover:w-2/3 -translate-x-1/2" />
             </Link>
           ))}
 
@@ -110,14 +120,14 @@ export const Navbar = () => {
               </button>
             </DropdownMenuTrigger>
             <DropdownMenuContent
-              className="bg-background/95 backdrop-blur-md border border-border p-4 rounded-xl w-[420px] grid grid-cols-2 gap-3 shadow-lg"
+              className="bg-white/10 border border-white/20 backdrop-blur-md p-4 rounded-xl w-[420px] grid grid-cols-2 gap-3 shadow-md"
               align="center"
             >
               {resources.map((item) => (
                 <DropdownMenuItem key={item.title} asChild>
                   <Link
                     href={item.href}
-                    className="flex flex-col items-start gap-0.5 p-2 rounded-lg transition-colors hover:bg-primary/10 hover:text-primary"
+                    className="flex flex-col items-start gap-0.5 p-2 rounded-lg transition-all duration-200 bg-muted/30 border border-border hover:bg-muted/60 hover:text-primary"
                   >
                     <span className="text-sm font-medium">{item.title}</span>
                     <span className="text-xs text-muted-foreground">
@@ -129,7 +139,7 @@ export const Navbar = () => {
             </DropdownMenuContent>
           </DropdownMenu>
 
-          {/* GitHub Icon */}
+          {/* GitHub */}
           <a
             href="https://github.com/shafin-29/Zixxy.git"
             target="_blank"
@@ -148,7 +158,18 @@ export const Navbar = () => {
       </nav>
 
       {/* Right side */}
-      <div className="flex items-center ml-auto gap-2">
+      <div className="flex items-center ml-auto gap-2 relative">
+        {/* Credits button */}
+        {usage && (
+          <button
+            onClick={() => setShowCredits(!showCredits)}
+            className="flex items-center gap-1.5 px-2 py-1 rounded-full text-xs font-medium border border-border bg-muted/40 hover:bg-primary/10 hover:border-primary/40 hover:text-primary text-muted-foreground transition-all duration-200"
+          >
+            <CreditCardIcon className="h-3 w-3" />
+            {usage.remainingPoints} credits
+          </button>
+        )}
+        
         <SignedOut>
           <SignUpButton>
             <InteractiveHoverButton text="Sign Up" />
@@ -157,9 +178,21 @@ export const Navbar = () => {
         <SignedIn>
           <UserControl />
         </SignedIn>
+
+        {/* Credits dropdown */}
+        {showCredits && usage && (
+          <div className="absolute top-full right-0 mt-2 w-80 bg-background/95 backdrop-blur-md border border-border rounded-lg shadow-lg z-50">
+            <div className="p-4">
+              <Usage
+                points={usage.remainingPoints}
+                msBeforeNext={usage.msBeforeNext}
+              />
+            </div>
+          </div>
+        )}
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default Navbar;
+export default Navbar
