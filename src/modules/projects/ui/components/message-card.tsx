@@ -6,10 +6,10 @@ import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { formatDistanceToNow } from "date-fns";
 import Image from "next/image";
-import { 
-  ChevronRightIcon, 
-  Code2Icon, 
-  CopyIcon, 
+import {
+  ChevronRightIcon,
+  Code2Icon,
+  CopyIcon,
   CheckIcon,
   AlertCircleIcon,
   UserIcon,
@@ -47,16 +47,16 @@ const UserMessage = ({ content, createdAt }: UserMessageProps) => {
           </div>
           <span>{formatDistanceToNow(createdAt, { addSuffix: true })}</span>
         </div>
-        
+
         {/* Message bubble - milder background */}
         <Card className="relative bg-primary/90 dark:bg-primary/80 text-primary-foreground rounded-2xl rounded-tr-md p-4 shadow-md border border-primary/20 dark:border-primary/30 group/message">
           {/* Very subtle background pattern */}
           <div className="absolute inset-0 bg-gradient-to-br from-white/5 dark:from-white/3 to-transparent rounded-2xl rounded-tr-md" />
-          
+
           <div className="relative whitespace-pre-wrap break-words leading-relaxed font-medium pr-8">
             {content}
           </div>
-          
+
           {/* Copy button */}
           <Button
             variant="ghost"
@@ -70,7 +70,7 @@ const UserMessage = ({ content, createdAt }: UserMessageProps) => {
               <CopyIcon className="h-3.5 w-3.5" />
             )}
           </Button>
-          
+
           {/* Message tail - milder */}
           <div className="absolute -bottom-1 -right-1 w-4 h-4 bg-primary/90 dark:bg-primary/80 transform rotate-45" />
         </Card>
@@ -105,18 +105,18 @@ const FragmentCard = ({
         {isActiveFragment && (
           <div className="absolute inset-0 bg-gradient-to-r from-primary/12 dark:from-primary/18 to-primary/8 dark:to-primary/15" />
         )}
-        
+
         {/* Content */}
         <div className="relative flex items-center gap-4 z-10">
           <div className={cn(
             "p-3 rounded-xl border shadow-sm",
-            isActiveFragment 
-              ? "bg-primary/20 dark:bg-primary/25 border-primary/30 dark:border-primary/40 text-primary" 
+            isActiveFragment
+              ? "bg-primary/20 dark:bg-primary/25 border-primary/30 dark:border-primary/40 text-primary"
               : "bg-primary/8 dark:bg-primary/12 border-primary/20 dark:border-primary/25 text-primary group-hover:bg-primary/12 dark:group-hover:bg-primary/18"
           )}>
             <Code2Icon size={22} strokeWidth={2} />
           </div>
-          
+
           <div className="flex flex-col items-start gap-1">
             <span className={cn(
               "font-bold text-base",
@@ -127,19 +127,19 @@ const FragmentCard = ({
             <div className="flex items-center gap-2 text-sm">
               <PlayIcon className="h-3.5 w-3.5 text-muted-foreground" />
               <span className="text-muted-foreground">
-                Interactive Preview
+                ML Pipeline Result
               </span>
             </div>
           </div>
         </div>
 
         {/* Arrow */}
-        <ChevronRightIcon 
+        <ChevronRightIcon
           className={cn(
             "relative z-10 transition-colors duration-200",
             isActiveFragment ? "text-primary" : "text-muted-foreground group-hover:text-primary"
-          )} 
-          size={24} 
+          )}
+          size={24}
           strokeWidth={2}
         />
 
@@ -219,10 +219,10 @@ const AssistantMessage = ({
           {/* Avatar */}
           <div className="relative">
             <div className="w-9 h-9 rounded-full bg-gradient-to-br from-muted/80 to-muted dark:from-muted/60 dark:to-muted/80 flex items-center justify-center border-2 border-border shadow-md">
-              <Image 
-                src="/mylogo.png" 
-                alt="Zixxy" 
-                width={20} 
+              <Image
+                src="/mylogo.png"
+                alt="Zixxy"
+                width={20}
                 height={20}
               />
             </div>
@@ -232,7 +232,7 @@ const AssistantMessage = ({
               isGenerating ? "bg-yellow-500 animate-pulse" : "bg-green-500"
             )} />
           </div>
-          
+
           {/* Name and status */}
           <div className="flex items-center gap-3">
             <span className="text-base font-bold">Zixxy</span>
@@ -279,7 +279,7 @@ const AssistantMessage = ({
           {isResult && !isGenerating && (
             <div className="absolute top-0 right-0 w-24 h-24 bg-gradient-to-bl from-primary/3 dark:from-primary/6 to-transparent rounded-2xl" />
           )}
-          
+
           {/* Content */}
           <div className={cn(
             "relative whitespace-pre-wrap break-words leading-relaxed text-base pr-8",
@@ -317,9 +317,9 @@ const AssistantMessage = ({
           <div className={cn(
             "absolute -bottom-1 left-10 w-4 h-4 border-l-2 border-b-2 transform rotate-45",
             isGenerating ? "bg-yellow-500/3 dark:bg-yellow-500/8 border-yellow-500/25 dark:border-yellow-500/35" :
-            isError ? "bg-destructive/3 dark:bg-destructive/8 border-destructive/25 dark:border-destructive/35" : 
-            isResult ? "bg-primary/3 dark:bg-primary/8 border-primary/25 dark:border-primary/35" : 
-            "bg-card border-border"
+              isError ? "bg-destructive/3 dark:bg-destructive/8 border-destructive/25 dark:border-destructive/35" :
+                isResult ? "bg-primary/3 dark:bg-primary/8 border-primary/25 dark:border-primary/35" :
+                  "bg-card border-border"
           )} />
         </Card>
 

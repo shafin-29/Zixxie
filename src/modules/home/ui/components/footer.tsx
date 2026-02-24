@@ -106,13 +106,6 @@ export const Footer = () => {
                   >
                     {social.name}
                   </span>
-                  <span
-                    className={`absolute top-full left-1/2 transform -translate-x-1/2 w-2 h-2 bg-foreground rotate-45 ${
-                      hoveredSocial === social.name
-                        ? "opacity-100 -translate-y-1 dark:bg-primary dark:text-primary-foreground"
-                        : "opacity-0 translate-y-0 dark:bg-primary dark:text-primary-foreground"
-                    }`}
-                  />
                 </a>
               )
             })}

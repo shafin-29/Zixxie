@@ -181,13 +181,11 @@ export const Navbar = () => {
 
         {/* Credits dropdown */}
         {showCredits && usage && (
-          <div className="absolute top-full right-0 mt-2 w-80 bg-background/95 backdrop-blur-md border border-border rounded-lg shadow-lg z-50">
-            <div className="p-4">
-              <Usage
-                points={usage.remainingPoints}
-                msBeforeNext={usage.msBeforeNext}
-              />
-            </div>
+          <div className="absolute top-full right-0 mt-2 w-80 bg-white/10 border border-white/20 backdrop-blur-md rounded-xl shadow-lg z-50">
+            <Usage
+              points={usage.remainingPoints}
+              msBeforeNext={usage.msBeforeNext}
+            />
           </div>
         )}
       </div>
