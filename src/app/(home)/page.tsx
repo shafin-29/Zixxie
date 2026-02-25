@@ -62,7 +62,7 @@ const Page = () => {
             <HowItWorksSection />
             <Features />
             <div className="flex items-center justify-center w-full">
-              <p className="text-7xl font-semibold text-center tracking-tighter cursor-pointer text-foreground transition-all duration-300 ease-in-out hover:underline hover:-translate-y-2">
+              <p className="text-7xl font-semibold text-center tracking-tighter cursor-pointer text-foreground transition-all duration-300 ease-in-out hover:-translate-y-2">
                 Stop Guessing.{" "}
                 <span className="text-primary">Start Training.</span>
               </p>
