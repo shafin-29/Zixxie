@@ -61,7 +61,7 @@ export const ProjectsList = () => {
           </div>
           <div>
             <h2 className="text-xl font-bold bg-gradient-to-r from-foreground to-foreground/80 bg-clip-text text-transparent">
-              Your ML Projects
+              Previous Projects
             </h2>
             <p className="text-muted-foreground mt-1 text-md">
               {projects?.length || 0}{" "}

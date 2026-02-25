@@ -154,7 +154,7 @@ export function Features() {
               <div className="grid h-full min-h-[150px] w-full grid-cols-2 gap-4 rounded-lg border bg-muted/20 p-4">
                  <div className="font-mono text-xs">
                     <p className="text-primary">// PROMPT</p>
-                    <p className="mt-2 text-foreground/80">"Create a modern pricing card component for a SaaS product."</p>
+                    <p className="mt-2 text-foreground/80">"Train a model on uploaded dataset"</p>
                     <p className="mt-2 text-foreground/80">______________________</p>
                     <div className="flex items-center gap-4 mt-4">
                         <SiOpenai className="size-6 text-primary hover:animate-spin" /> <FaGoogle className="size-6 text-primary" /> <SiAnthropic className="size-6 text-primary" />
